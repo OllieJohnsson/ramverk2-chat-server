@@ -1,0 +1,19 @@
+{
+  "name": "oj-ramverk2-chat",
+  "version": "1.0.0",
+  "description": "Chat module for ramverk2",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oliver Johnsson",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "ws": "^6.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}

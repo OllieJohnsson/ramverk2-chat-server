@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Chat</title>
+        <link rel="stylesheet" href="client.css">
+    </head>
+    <body>
+        <!-- <input type="text" id="connect_url" value="ws://localhost:1337"> -->
+        <!-- <select id="protocol" name="">
+            <option value="">Select protocol</option>
+            <option value="json">JSON</option>
+            <option value="text">Text</option>
+        </select> -->
+        <div class="chat">
+            <div class="inputArea">
+                <p>
+                <input type="text" id="nick" value="" placeholder="Nickname" required="required">
+                <button id="connect" type="button">Connect</button>
+                <button id="close" type="button" hidden=true>Close</button>
+                </p>
+
+                <p>
+                <input type="text" id="message" value="" placeholder="Message">
+                <button type="button" id="send">Send</button>
+                </p>
+            </div>
+
+            <div id="output" class="output"></div>
+        </div>
+
+    </body>
+
+    <script type="text/javascript" src="client.js"></script>
+</html>
