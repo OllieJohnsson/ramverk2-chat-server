@@ -16,9 +16,7 @@ const wss = new WebSocket.Server({
 
 app.use((req, res) => {
     console.log(`HTTP request on ${req.url}`);
-    res.json({
-        msg: "hello"
-    });
+    res.end("Hello!");
 });
 
 function handleProtocols(protocols) {
@@ -30,7 +28,6 @@ function handleProtocols(protocols) {
             return "json";
         }
     }
-
     return false;
 }
 
@@ -43,37 +40,13 @@ function broadcastExcept(ws, data) {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
             clients++;
 
-            if (data.hasOwnProperty("nick")) {
-                let msg = {
-                    timestamp: Date(),
-                    nick: data.nick,
-                    message: data.message
-                };
-                client.send(JSON.stringify(msg));
-            }
             let msg = {
                 timestamp: Date(),
-                data
+                nickname: data.nickname,
+                message: data.message
             };
 
-
-            console.log(msg);
-            return;
-
             client.send(JSON.stringify(msg));
-
-            // if (ws.protocol === "json") {
-            //     let msg = {
-            //         timestamp: Date(),
-            //         data
-            //     };
-            //     if (data.nick) {
-            //         msg.nick = nick;
-            //     }
-            //     client.send(JSON.stringify(msg));
-            // } else {
-            //     client.send(data);
-            // }
         }
     });
     console.log(`Broadcasted data to ${clients} (${wss.clients.size}) clients.`);
@@ -83,13 +56,16 @@ function broadcastExcept(ws, data) {
 
 wss.on("connection", (ws) => {
     console.log("Connection received. Adding client.");
-    broadcastExcept(ws, `New client connected (${wss.clients.size}) using '${ws.protocol}'.`);
+    let data = {
+        message: `New client connected (${wss.clients.size}) using '${ws.protocol}'.`
+    };
+    broadcastExcept(ws, data);
 
 
 
 
     ws.on("message", (dataString) => {
-
+        console.log(dataString);
         let data = JSON.parse(dataString);
 
         // console.log("DATA", data);

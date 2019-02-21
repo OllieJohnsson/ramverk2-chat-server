@@ -2,10 +2,11 @@
 
 (function() {
     let websocket;
-    // let url = document.getElementById("connect_url");
+    let url = document.getElementById("connect_url");
     // let protocol = document.getElementById("protocol");
 
-    let url = "ws://localhost:1337";
+    // let url = "ws://localhost:1337";
+    // let url = "https://chat.olliej.me";
     let connect = document.getElementById("connect");
     let message = document.getElementById("message");
     let send = document.getElementById("send");
@@ -47,7 +48,7 @@
         connect.hidden = true;
         close.hidden = false;
 
-        console.log(`${nick.value} is connecting to: ${url}`);
+        console.log(`${nick.value} is connecting to: ${url.value}`);
 
         // if (!protocol.value) {
         //     websocket = new WebSocket(url.value);
@@ -55,7 +56,7 @@
         //     websocket = new WebSocket(url.value, (function() {return protocol.value}()));
         // }
 
-        websocket = new WebSocket(url, "json");
+        websocket = new WebSocket(url.value, "json");
 
 
 
