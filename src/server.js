@@ -1,6 +1,6 @@
 "use strict";
 
-const port = process.env.CHAT_PORT || 1337;
+const port = process.env.CHAT_PORT || 1338;
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
@@ -12,6 +12,23 @@ const wss = new WebSocket.Server({
     server,
     clientTracking: true,
     handleProtocols
+});
+
+
+const db = require("./db");
+
+
+// Return a JSON object with list of all documents within the collection.
+app.get("/list", async (request, response) => {
+    try {
+        let res = await db.findInCollection("log", {}, {}, 0);
+
+        console.log(res);
+        response.json(res);
+    } catch (err) {
+        console.log(err);
+        response.json(err);
+    }
 });
 
 app.use((req, res) => {
@@ -62,19 +79,31 @@ wss.on("connection", (ws) => {
     broadcastExcept(ws, data);
 
 
-
-
     ws.on("message", (dataString) => {
-        console.log(dataString);
+
         let data = JSON.parse(dataString);
 
-        // console.log("DATA", data);
-        // return;
-        // console.log(`Received message from ${data.nick}: ${data.message}`);
+        if (data.type === "save") {
+            console.log("Save log");
+            db.saveToCollection(data.nickname, JSON.parse(data.log));
+            return;
+        }
+
+        if (data.type === "load") {
+            console.log("Going to load db");
+
+            let res = db.findInCollection(data.nickname, {}, {}, 0).then(log => {
+                let data = {
+                    type: "log",
+                    log: log
+                };
+                ws.send(JSON.stringify(data))
+            });
+            return;
+        }
+
         broadcastExcept(ws, data);
     });
-
-
 
 
 
